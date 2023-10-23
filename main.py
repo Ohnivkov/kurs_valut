@@ -79,12 +79,12 @@ def kredobank():
     return l1
 
 def getfilekurs():
-    with open('kurs.json') as kurs:
+    with open(curs_file) as kurs:
         templates = json.load(kurs)
     return templates
 
 def putdatetofilekurs(data):
-    with open('kurs.json', 'w') as f:
+    with open(curs_file, 'w') as f:
         json.dump(data, f)
 
 def get_kurs_from_bank(kurs, bankname):
@@ -125,6 +125,7 @@ kurs['privat'] = {
 kurs['oshad'] = oshadbank()
 kurs['pumb'] = pumb()
 kurs['kredobank'] = kredobank()
+putdatetofilekurs(kurs)
 while True:
     kurs_old = getfilekurs()
     flag = False
@@ -147,5 +148,5 @@ while True:
             if user_list[i]:
                 send_telegram(send_to_tel,i)
         putdatetofilekurs(kurs)
-        with open(curs_file, 'w') as f:
+        with open(user_file, 'w') as f:
             json.dump(user_list, f)
