@@ -1,11 +1,11 @@
-import time
-
 import requests
 from bs4 import BeautifulSoup as bs
 from fake_useragent import UserAgent
 import json
 import telebot
-from telebot import types
+import os
+user_file = os.path.join(os.getcwd(), 'users.json')
+curs_file = os.path.join(os.getcwd(), 'kurs.json')
 def privatbank(a):
     r = requests.get('https://privatbank.ua/', timeout=10)
     get_bs_obj = bs(r.text, 'html.parser')
@@ -141,13 +141,11 @@ while True:
         send_to_tel += message(vivod, kirilitsia(bank))
         vivod = []
     if flag:
-        with open('users.json') as f:
+        with open(user_file) as f:
             user_list = json.load(f)
         for i in user_list:
             if user_list[i]:
                 send_telegram(send_to_tel,i)
         putdatetofilekurs(kurs)
-        with open('users.json', 'w') as f:
+        with open(curs_file, 'w') as f:
             json.dump(user_list, f)
-
-    time.sleep(30)
