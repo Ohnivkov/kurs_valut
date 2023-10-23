@@ -1,6 +1,10 @@
 import telebot
 from telebot import types
 import json
+import os
+
+user_file = os.path.join(os.getcwd(), 'users.json')
+curs_file = os.path.join(os.getcwd(), 'kurs.json')
 def kirilitsia(bankname):
     d = {'oshad':'ОщадБанк',
          'privat':'Приват',
@@ -34,7 +38,7 @@ def bot_activate(message):
     if message.chat.type == 'private':
         if message.text == 'Відслідковувати зміну курсу':
             m[message.chat.id]=True
-            with open('users.json', 'w') as f:
+            with open(user_file, 'w') as f:
                 json.dump(m, f)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             kurs_stop = types.KeyboardButton('Перестати відслідковувати зміну курсу')
@@ -43,7 +47,7 @@ def bot_activate(message):
             bot.send_message(message.chat.id, 'Тепер ви слідкуєте за курсом', reply_markup=markup)
         elif message.text == 'Перестати відслідковувати зміну курсу':
             m[message.chat.id]=False
-            with open('users.json', 'w') as f:
+            with open(user_file, 'w') as f:
                 json.dump(m, f)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             kurs_start = types.KeyboardButton('Відслідковувати зміну курсу')
@@ -51,7 +55,7 @@ def bot_activate(message):
             markup.add(kurs_start, kurs_now)
             bot.send_message(message.chat.id, 'Ви перестали слідкувати за курсом', reply_markup=markup)
         elif message.text == 'Теперешній курс':
-            with open('kurs.json') as f:
+            with open(curs_file) as f:
                 kurs=json.load(f)
             vivod=[]
             send_to_tel=''
