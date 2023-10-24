@@ -46,7 +46,7 @@ def pumb():
     res = {}
     ua = UserAgent()
     header = {'User-Agent': str(ua.chrome)}
-    r = requests.get("https://www.pumb.ua/", headers=header,proxies={'https':'http://80.84.176.110:8080'})
+    r = requests.get("https://www.pumb.ua/", headers=header,verify=False, proxies={'https': 'http://94.74.80.88:18081'})
     get_bs_obj = bs(r.text, 'html.parser')
     l = []
     for line in get_bs_obj.findAll('div', class_='rates-block', limit=6):
