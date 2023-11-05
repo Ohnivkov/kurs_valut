@@ -3,6 +3,12 @@ from telebot import types
 import json
 import os
 import main
+if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
+    with open(os.path.join(os.getcwd(), 'kurs.json.json'),'w'):
+        main.putdatetofilekurs(main.kurs)
+if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
+    with open(os.path.join(os.getcwd(), 'users.json'),'w'):
+        pass
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
 m={}

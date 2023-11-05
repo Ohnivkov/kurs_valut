@@ -4,8 +4,7 @@ from fake_useragent import UserAgent
 import json
 import telebot
 import os
-user_file = os.path.join(os.getcwd(), 'users.json')
-curs_file = os.path.join(os.getcwd(), 'kurs.json')
+
 def privatbank(a):
     r = requests.get('https://privatbank.ua/', timeout=10)
     get_bs_obj = bs(r.text, 'html.parser')
@@ -124,6 +123,16 @@ kurs['privat'] = {
     'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
 kurs['oshad'] = oshadbank()
 kurs['kredobank'] = kredobank()
+if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
+    with open(os.path.join(os.getcwd(), 'kurs.json'),'w') as f:
+        json.dump(kurs, f)
+if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
+    with open(os.path.join(os.getcwd(), 'users.json'),'w'):
+        pass
+
+user_file = os.path.join(os.getcwd(), 'users.json')
+curs_file = os.path.join(os.getcwd(), 'kurs.json')
+
 send_to_tel = ''
 def main():
     kurs_old = getfilekurs()
