@@ -45,6 +45,7 @@ def bot_activate(message):
         elif message.text == 'Теперешній курс':
             if main.main()==True:
                 bot.send_message(message.chat.id, main.send_to_tel, parse_mode='html')
+                main.send_to_tel = ''
             else:
                 with open(curs_file) as f:
                     kurs=json.load(f)
