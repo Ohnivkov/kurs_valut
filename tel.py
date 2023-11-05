@@ -3,15 +3,15 @@ from telebot import types
 import json
 import os
 import main
+m={}
 if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
-    with open(os.path.join(os.getcwd(), 'kurs.json.json'),'w'):
-        main.putdatetofilekurs(main.kurs)
+    with open(os.path.join(os.getcwd(), 'kurs.json'),'w') as f:
+        json.dump(main.kurs,f)
 if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
-    with open(os.path.join(os.getcwd(), 'users.json'),'w'):
-        pass
+    with open(os.path.join(os.getcwd(), 'users.json'),'w') as f:
+        json.dump(m,f)
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
-m={}
 bot=telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
 @bot.message_handler(commands=['start'])
 def start(message):
