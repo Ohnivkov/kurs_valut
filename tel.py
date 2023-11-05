@@ -2,27 +2,9 @@ import telebot
 from telebot import types
 import json
 import os
-
+import main
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
-def kirilitsia(bankname):
-    d = {'oshad':'ОщадБанк',
-         'privat':'Приват',
-         'ukrsib':'Укрсиб',
-         'kredobank':'Кредобанк',
-         'pumb':'Пумб'}
-    return d[bankname]
-def message_to_tel(kurs, bankname):
-    message = """
-<b><u>{}</u></b>
-  Доллар:
-    Продаж: {}
-    Купівля: {}
-  Євро:
-    Продаж: {}
-    Купівля: {}
-     """.format(bankname, *kurs)
-    return message
 m={}
 bot=telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
 @bot.message_handler(commands=['start'])
@@ -55,15 +37,18 @@ def bot_activate(message):
             markup.add(kurs_start, kurs_now)
             bot.send_message(message.chat.id, 'Ви перестали слідкувати за курсом', reply_markup=markup)
         elif message.text == 'Теперешній курс':
-            with open(curs_file) as f:
-                kurs=json.load(f)
-            vivod=[]
-            send_to_tel=''
-            for bank in kurs:
-                for val in kurs[bank]:
-                    for sell_buy in kurs[bank][val]:
-                        vivod.append(str(kurs[bank][val][sell_buy]))
-                send_to_tel += message_to_tel(vivod, kirilitsia(bank))
-                vivod = []
-            bot.send_message(message.chat.id, send_to_tel,parse_mode='html')
+            if main.main()==True:
+                bot.send_message(message.chat.id, main.send_to_tel, parse_mode='html')
+            else:
+                with open(curs_file) as f:
+                    kurs=json.load(f)
+                vivod=[]
+                send_to_tel=''
+                for bank in kurs:
+                    for val in kurs[bank]:
+                        for sell_buy in kurs[bank][val]:
+                            vivod.append(str(kurs[bank][val][sell_buy]))
+                    send_to_tel += main.message(vivod, main.kirilitsia(bank))
+                    vivod = []
+                bot.send_message(message.chat.id, send_to_tel,parse_mode='html')
 bot.polling(none_stop=True)

@@ -42,25 +42,25 @@ def oshadbank():
             l={'USD':{'sell':float(res['usd_sell']), 'buy':float(res['usd_buy'])},'EUR':{'sell':float(res['eur_sell']), 'buy':float(res['eur_buy'])}}
     return l
 
-def pumb():
-    res = {}
-    ua = UserAgent()
-    header = {'User-Agent': str(ua.chrome)}
-    r = requests.get("https://www.pumb.ua/", headers=header,verify=False, proxies={'https': 'http://94.74.80.88:18081'})
-    get_bs_obj = bs(r.text, 'html.parser')
-    l = []
-    for line in get_bs_obj.findAll('div', class_='rates-block', limit=6):
-        r = line.text
-        l.append((''.join(
-            [r[i] for i in range(len(line.text)) if line.text[i].isdigit() or r[i] == '.' and r[i - 1].isdigit()])))
-    res['usd_sell'] = float(l[1])
-    res['usd_buy'] = float(l[2])
-    res['eur_sell'] = float(l[4])
-    res['eur_buy'] = float(l[5])
-
-    l = {'USD': {'sell':float(res['usd_sell']), 'buy':float(res['usd_buy'])},
-         'EUR': {'sell':float(res['eur_sell']), 'buy':float(res['eur_buy'])}}
-    return l
+# def pumb():
+#     res = {}
+#     ua = UserAgent()
+#     header = {'User-Agent': str(ua.chrome)}
+#     r = requests.get("https://www.pumb.ua/", headers=header,verify=False, proxies={'https': 'http://94.74.80.88:18081'})
+#     get_bs_obj = bs(r.text, 'html.parser')
+#     l = []
+#     for line in get_bs_obj.findAll('div', class_='rates-block', limit=6):
+#         r = line.text
+#         l.append((''.join(
+#             [r[i] for i in range(len(line.text)) if line.text[i].isdigit() or r[i] == '.' and r[i - 1].isdigit()])))
+#     res['usd_sell'] = float(l[1])
+#     res['usd_buy'] = float(l[2])
+#     res['eur_sell'] = float(l[4])
+#     res['eur_buy'] = float(l[5])
+#
+#     l = {'USD': {'sell':float(res['usd_sell']), 'buy':float(res['usd_buy'])},
+#          'EUR': {'sell':float(res['eur_sell']), 'buy':float(res['eur_buy'])}}
+#     return l
 
 def kredobank():
     r = requests.get("https://kredobank.com.ua/info/kursy-valyut/commercial")
@@ -123,14 +123,13 @@ kurs['privat'] = {
     'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
     'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
 kurs['oshad'] = oshadbank()
-kurs['pumb'] = pumb()
 kurs['kredobank'] = kredobank()
-putdatetofilekurs(kurs)
-while True:
+send_to_tel = ''
+def main():
     kurs_old = getfilekurs()
     flag = False
     vivod = []
-    send_to_tel = ''
+    global send_to_tel
     for bank in kurs:
         for val in kurs[bank]:
              for sell_buy in kurs[bank][val]:
@@ -142,6 +141,12 @@ while True:
         send_to_tel += message(vivod, kirilitsia(bank))
         vivod = []
     if flag:
+        return True
+    else:
+        return False
+
+if __name__ == '__main__':
+    if main()==True:
         with open(user_file) as f:
             user_list = json.load(f)
         for i in user_list:
