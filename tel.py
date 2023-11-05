@@ -44,6 +44,7 @@ def bot_activate(message):
             bot.send_message(message.chat.id, 'Ви перестали слідкувати за курсом', reply_markup=markup)
         elif message.text == 'Теперешній курс':
             if main.main()==True:
+                main.putdatetofilekurs(main.kurs)
                 bot.send_message(message.chat.id, main.send_to_tel, parse_mode='html')
                 main.send_to_tel = ''
             else:
