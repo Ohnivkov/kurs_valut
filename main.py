@@ -31,7 +31,7 @@ def oshadbank():
     r = requests.get("https://www.oschadbank.ua")
     get_bs_obj = bs(r.text, 'html.parser')
     for line in get_bs_obj.findAll('div', class_='currency__item', limit=2):
-        sell, buy = line.findAll('span', class_='currency__item_value')
+        buy,sell = line.findAll('span', class_='currency__item_value')
         if line.find('span', class_="currency__item_name").text == 'USD':
             res['usd_sell'] = sell.span.text
             res['usd_buy'] = buy.span.text
@@ -68,12 +68,12 @@ def kredobank():
     l=[]
     for line in get_bs_obj.findAll('div', class_='chart__number'):
         l.append(line.text)
-    res['usd_sell'] = l[0]
-    res['usd_buy'] = l[1]
+    res['usd_sell'] = l[1]
+    res['usd_buy'] = l[0]
     for line in get_bs_obj.findAll('td', limit=10):
         l.append(line.text)
-    res['eur_sell'] = l[10]
-    res['eur_buy'] = l[11]
+    res['eur_sell'] = l[11]
+    res['eur_buy'] = l[10]
     l1 = {'USD': {'sell': float(res['usd_sell']), 'buy': float(res['usd_buy'])}, 'EUR':{'sell':float(res['eur_sell']), 'buy':float(res['eur_buy'])}}
     return l1
 
@@ -114,24 +114,7 @@ def kirilitsia(bankname):
          'pumb':'Пумб'}
     return d[bankname]
 
-kurs = {}
-kurs['ukrsib'] = {
-     'USD': {"sell": ukrsib('USD',2), "buy": ukrsib('USD',1)},
-     'EUR': {"sell": ukrsib('EUR', 2), "buy": ukrsib('EUR', 1)}}
-kurs['privat'] = {
-    'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
-    'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
-kurs['oshad'] = oshadbank()
-kurs['kredobank'] = kredobank()
-if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
-    with open(os.path.join(os.getcwd(), 'kurs.json'),'w') as f:
-        json.dump(kurs, f)
-if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
-    with open(os.path.join(os.getcwd(), 'users.json'),'w'):
-        pass
 
-user_file = os.path.join(os.getcwd(), 'users.json')
-curs_file = os.path.join(os.getcwd(), 'kurs.json')
 
 send_to_tel = ''
 def main():
@@ -155,6 +138,24 @@ def main():
         return False
 
 if __name__ == '__main__':
+    kurs = {}
+    kurs['ukrsib'] = {
+        'USD': {"sell": ukrsib('USD', 2), "buy": ukrsib('USD', 1)},
+        'EUR': {"sell": ukrsib('EUR', 2), "buy": ukrsib('EUR', 1)}}
+    kurs['privat'] = {
+        'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
+        'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
+    kurs['oshad'] = oshadbank()
+    kurs['kredobank'] = kredobank()
+    if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
+        with open(os.path.join(os.getcwd(), 'kurs.json'), 'w') as f:
+            json.dump(kurs, f)
+    if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
+        with open(os.path.join(os.getcwd(), 'users.json'), 'w') as f:
+            json.dump({}, f)
+
+    user_file = os.path.join(os.getcwd(), 'users.json')
+    curs_file = os.path.join(os.getcwd(), 'kurs.json')
     if main()==True:
         with open(user_file) as f:
             user_list = json.load(f)

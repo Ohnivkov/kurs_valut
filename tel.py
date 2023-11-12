@@ -21,6 +21,10 @@ def start(message):
     markup.add(kurs_start,kurs_now)
     bot.send_message(message.chat.id,'Вітаю вас!', reply_markup=markup)
 
+
+
+
+
 @bot.message_handler(content_types=['text'])
 def bot_activate(message):
     if message.chat.type == 'private':
@@ -59,4 +63,6 @@ def bot_activate(message):
                     send_to_tel += main.message(vivod, main.kirilitsia(bank))
                     vivod = []
                 bot.send_message(message.chat.id, send_to_tel,parse_mode='html')
+                with open(curs_file,'w') as f:
+                    json.dump(kurs,f)
 bot.polling(none_stop=True)
