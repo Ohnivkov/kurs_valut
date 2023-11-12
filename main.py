@@ -114,7 +114,24 @@ def kirilitsia(bankname):
          'pumb':'Пумб'}
     return d[bankname]
 
+kurs = {}
+kurs['ukrsib'] = {
+     'USD': {"sell": ukrsib('USD',2), "buy": ukrsib('USD',1)},
+     'EUR': {"sell": ukrsib('EUR', 2), "buy": ukrsib('EUR', 1)}}
+kurs['privat'] = {
+    'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
+    'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
+kurs['oshad'] = oshadbank()
+kurs['kredobank'] = kredobank()
+if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
+    with open(os.path.join(os.getcwd(), 'kurs.json'),'w') as f:
+        json.dump(kurs, f)
+if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
+    with open(os.path.join(os.getcwd(), 'users.json'),'w') as f:
+        json.dump({}, f)
 
+user_file = os.path.join(os.getcwd(), 'users.json')
+curs_file = os.path.join(os.getcwd(), 'kurs.json')
 
 send_to_tel = ''
 def main():
@@ -138,24 +155,6 @@ def main():
         return False
 
 if __name__ == '__main__':
-    kurs = {}
-    kurs['ukrsib'] = {
-        'USD': {"sell": ukrsib('USD', 2), "buy": ukrsib('USD', 1)},
-        'EUR': {"sell": ukrsib('EUR', 2), "buy": ukrsib('EUR', 1)}}
-    kurs['privat'] = {
-        'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
-        'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
-    kurs['oshad'] = oshadbank()
-    kurs['kredobank'] = kredobank()
-    if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
-        with open(os.path.join(os.getcwd(), 'kurs.json'), 'w') as f:
-            json.dump(kurs, f)
-    if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
-        with open(os.path.join(os.getcwd(), 'users.json'), 'w') as f:
-            json.dump({}, f)
-
-    user_file = os.path.join(os.getcwd(), 'users.json')
-    curs_file = os.path.join(os.getcwd(), 'kurs.json')
     if main()==True:
         with open(user_file) as f:
             user_list = json.load(f)
