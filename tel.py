@@ -3,13 +3,12 @@ from telebot import types
 import json
 import os
 import main
-m={}
 if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
     with open(os.path.join(os.getcwd(), 'kurs.json'),'w') as f:
         json.dump(main.kurs,f)
 if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
     with open(os.path.join(os.getcwd(), 'users.json'),'w') as f:
-        json.dump(m,f)
+        json.dump(f)
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
 bot=telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
@@ -29,6 +28,8 @@ def start(message):
 def bot_activate(message):
     if message.chat.type == 'private':
         if message.text == 'Відслідковувати зміну курсу':
+            with open(user_file,'r') as f:
+                m=json.load(f)
             m[message.chat.id]=True
             with open(user_file, 'w') as f:
                 json.dump(m, f)
@@ -38,7 +39,9 @@ def bot_activate(message):
             markup.add(kurs_stop, kurs_now)
             bot.send_message(message.chat.id, 'Тепер ви слідкуєте за курсом', reply_markup=markup)
         elif message.text == 'Перестати відслідковувати зміну курсу':
-            m[message.chat.id]=False
+            with open(user_file, 'r') as f:
+                m = json.load(f)
+            m[message.chat.id] = False
             with open(user_file, 'w') as f:
                 json.dump(m, f)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
