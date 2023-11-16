@@ -162,5 +162,3 @@ if __name__ == '__main__':
             if user_list[i]:
                 send_telegram(send_to_tel,i)
         putdatetofilekurs(kurs)
-        with open(user_file, 'w') as f:
-            json.dump(user_list, f)
