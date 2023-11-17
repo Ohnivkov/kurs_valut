@@ -30,7 +30,7 @@ def bot_activate(message):
         if message.text == 'Відслідковувати зміну курсу':
             with open(user_file,'r') as f:
                 m=json.load(f)
-            m[message.chat.id]=True
+            m[str(message.chat.id)]=True
             with open(user_file, 'w') as f:
                 json.dump(m, f)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -41,7 +41,8 @@ def bot_activate(message):
         elif message.text == 'Перестати відслідковувати зміну курсу':
             with open(user_file, 'r') as f:
                 m = json.load(f)
-            m[message.chat.id] = False
+            print(m)
+            m[str(message.chat.id)] = False
             with open(user_file, 'w') as f:
                 json.dump(m, f)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
