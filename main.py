@@ -72,8 +72,8 @@ def kredobank():
     res['usd_buy'] = l[0]
     for line in get_bs_obj.findAll('td', limit=10):
         l.append(line.text)
-    res['eur_sell'] = l[11]
-    res['eur_buy'] = l[10]
+    res['eur_sell'] = l[10]
+    res['eur_buy'] = l[11]
     l1 = {'USD': {'sell': float(res['usd_sell']), 'buy': float(res['usd_buy'])}, 'EUR':{'sell':float(res['eur_sell']), 'buy':float(res['eur_buy'])}}
     return l1
 
