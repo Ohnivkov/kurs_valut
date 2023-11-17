@@ -149,6 +149,7 @@ def main():
                     vivod.append(str(kurs[bank][val][sell_buy]))
         send_to_tel += message(vivod, kirilitsia(bank))
         vivod = []
+
     if flag:
         return True
     else:
@@ -161,4 +162,5 @@ if __name__ == '__main__':
         for i in user_list:
             if user_list[i]:
                 send_telegram(send_to_tel,i)
+        send_to_tel = ''
         putdatetofilekurs(kurs)
