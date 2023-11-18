@@ -162,5 +162,6 @@ if __name__ == '__main__':
         for i in user_list:
             if user_list[i]:
                 send_telegram(send_to_tel,i)
-        send_to_tel = ''
+
         putdatetofilekurs(kurs)
+    send_to_tel = ''
