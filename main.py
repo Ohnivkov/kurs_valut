@@ -164,4 +164,3 @@ if __name__ == '__main__':
                 send_telegram(send_to_tel,i)
 
         putdatetofilekurs(kurs)
-    send_to_tel = ''
