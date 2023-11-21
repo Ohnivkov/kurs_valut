@@ -151,6 +151,7 @@ def main():
         vivod = []
 
     if flag:
+        putdatetofilekurs(kurs)
         return True
     else:
         return False
@@ -163,4 +164,3 @@ if __name__ == '__main__':
             if user_list[i]:
                 send_telegram(send_to_tel,i)
 
-        putdatetofilekurs(kurs)

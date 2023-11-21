@@ -68,6 +68,6 @@ def bot_activate(message):
                     send_to_tel += main.message(vivod, main.kirilitsia(bank))
                     vivod = []
                 bot.send_message(message.chat.id, send_to_tel,parse_mode='html')
-                with open(curs_file,'w') as f:
-                    json.dump(kurs,f)
+
+
 bot.polling(none_stop=True)
