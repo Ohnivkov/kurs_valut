@@ -53,7 +53,6 @@ def bot_activate(message):
         elif message.text == 'Теперешній курс':
             main.send_to_tel = ''
             if main.main()==True:
-                main.main()
                 bot.send_message(message.chat.id, main.send_to_tel, parse_mode='html')
                 main.send_to_tel = ''
             else:
