@@ -3,34 +3,34 @@ from telebot import types
 import json
 import os
 import main
+
 if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
-    with open(os.path.join(os.getcwd(), 'kurs.json'),'w') as f:
-        json.dump(main.kurs,f)
+    with open(os.path.join(os.getcwd(), 'kurs.json'), 'w') as f:
+        json.dump(main.kurs, f)
 if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
-    with open(os.path.join(os.getcwd(), 'users.json'),'w') as f:
+    with open(os.path.join(os.getcwd(), 'users.json'), 'w') as f:
         json.dump(f)
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
-bot=telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
+bot = telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
+
+
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     kurs_start = types.KeyboardButton('Відслідковувати зміну курсу')
     kurs_now = types.KeyboardButton('Теперешній курс')
-    markup.add(kurs_start,kurs_now)
-    bot.send_message(message.chat.id,'Вітаю вас!', reply_markup=markup)
-
-
-
+    markup.add(kurs_start, kurs_now)
+    bot.send_message(message.chat.id, 'Вітаю вас!', reply_markup=markup)
 
 
 @bot.message_handler(content_types=['text'])
 def bot_activate(message):
     if message.chat.type == 'private':
         if message.text == 'Відслідковувати зміну курсу':
-            with open(user_file,'r') as f:
-                m=json.load(f)
-            m[str(message.chat.id)]=True
+            with open(user_file, 'r') as f:
+                m = json.load(f)
+            m[str(message.chat.id)] = True
             with open(user_file, 'w') as f:
                 json.dump(m, f)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -52,21 +52,21 @@ def bot_activate(message):
             bot.send_message(message.chat.id, 'Ви перестали слідкувати за курсом', reply_markup=markup)
         elif message.text == 'Теперешній курс':
             main.send_to_tel = ''
-            if main.main()==True:
+            if main.main() == True:
                 bot.send_message(message.chat.id, main.send_to_tel, parse_mode='html')
                 main.send_to_tel = ''
             else:
                 with open(curs_file) as f:
-                    kurs=json.load(f)
-                vivod=[]
-                send_to_tel=''
+                    kurs = json.load(f)
+                vivod = []
+                send_to_tel = ''
                 for bank in kurs:
                     for val in kurs[bank]:
                         for sell_buy in kurs[bank][val]:
                             vivod.append(str(kurs[bank][val][sell_buy]))
                     send_to_tel += main.message(vivod, main.kirilitsia(bank))
                     vivod = []
-                bot.send_message(message.chat.id, send_to_tel,parse_mode='html')
+                bot.send_message(message.chat.id, send_to_tel, parse_mode='html')
 
 
 bot.polling(none_stop=True)
