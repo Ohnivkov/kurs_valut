@@ -5,6 +5,9 @@ import json
 import telebot
 import os
 
+user_file = os.path.join(os.getcwd(), 'users.json')
+curs_file = os.path.join(os.getcwd(), 'kurs.json')
+
 
 def privatbank(a):
     r = requests.get('https://privatbank.ua/', timeout=10)
@@ -108,29 +111,31 @@ def kirilitsia(bankname):
     return d[bankname]
 
 
-kurs = {}
-kurs['ukrsib'] = {
-    'USD': {"sell": ukrsib('USD', 2), "buy": ukrsib('USD', 1)},
-    'EUR': {"sell": ukrsib('EUR', 2), "buy": ukrsib('EUR', 1)}}
-kurs['privat'] = {
-    'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
-    'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
-kurs['oshad'] = oshadbank()
-kurs['kredobank'] = kredobank()
+def get_new_kurs():
+    kurs = {}
+
+    kurs['ukrsib'] = {
+        'USD': {"sell": ukrsib('USD', 2), "buy": ukrsib('USD', 1)},
+        'EUR': {"sell": ukrsib('EUR', 2), "buy": ukrsib('EUR', 1)}}
+    kurs['privat'] = {
+        'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
+        'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
+    kurs['oshad'] = oshadbank()
+    kurs['kredobank'] = kredobank()
+    return kurs
+
+
 if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
     with open(os.path.join(os.getcwd(), 'kurs.json'), 'w') as f:
-        json.dump(kurs, f)
+        json.dump(get_new_kurs(), f)
 if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
     with open(os.path.join(os.getcwd(), 'users.json'), 'w') as f:
         json.dump({}, f)
 
-user_file = os.path.join(os.getcwd(), 'users.json')
-curs_file = os.path.join(os.getcwd(), 'kurs.json')
-
 send_to_tel = ''
 
 
-def main():
+def main(kurs):
     kurs_old = getfilekurs()
     flag = False
     vivod = []
@@ -155,7 +160,7 @@ def main():
 
 
 if __name__ == '__main__':
-    if main() == True:
+    if main(get_new_kurs()) == True:
         with open(user_file) as f:
             user_list = json.load(f)
         for i in user_list:
