@@ -41,7 +41,6 @@ def bot_activate(message):
         elif message.text == 'Перестати відслідковувати зміну курсу':
             with open(user_file, 'r') as f:
                 m = json.load(f)
-            print(m)
             m[str(message.chat.id)] = False
             with open(user_file, 'w') as f:
                 json.dump(m, f)
