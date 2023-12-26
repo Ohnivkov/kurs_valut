@@ -22,8 +22,8 @@ def ukrsib():
     r = requests.get("https://ukrsibbank.com/", headers=header)
     get_bs_obj = bs(r.text, 'html.parser')
     values = get_bs_obj.findAll('div', class_='module-exchange__item-text')
-    kurs_dict['USD']={"sell":float(values[1].text.strip().replace(',','.')),'buy':float(values[2].text.strip().replace(',','.'))}
-    kurs_dict['EUR']={"sell":float(values[5].text.strip().replace(',','.')),'buy':float(values[6].text.strip().replace(',','.'))}
+    kurs_dict['USD']={"sell":float(values[2].text.strip().replace(',','.')),'buy':float(values[1].text.strip().replace(',','.'))}
+    kurs_dict['EUR']={"sell":float(values[6].text.strip().replace(',','.')),'buy':float(values[5].text.strip().replace(',','.'))}
     return kurs_dict
 
 
