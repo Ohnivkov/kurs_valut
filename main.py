@@ -111,10 +111,11 @@ def kirilitsia(bankname):
 def get_new_kurs():
     kurs = {}
 
-    kurs['ukrsib'] = ukrsib()
+
     kurs['privat'] = {
         'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
         'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
+    kurs['ukrsib'] = ukrsib()
     kurs['oshad'] = oshadbank()
     kurs['kredobank'] = kredobank()
     return kurs
