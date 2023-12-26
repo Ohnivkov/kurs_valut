@@ -15,19 +15,16 @@ def privatbank(a):
     return float(get_bs_obj.find('td', id=a).text.strip())
 
 
-def ukrsib(a, b):
+def ukrsib():
     ua = UserAgent()
-
+    kurs_dict={}
     header = {'User-Agent': ua.chrome}
     r = requests.get("https://ukrsibbank.com/", headers=header)
     get_bs_obj = bs(r.text, 'html.parser')
-    values = get_bs_obj.find('ul', class_='module-exchange__list module-exchange__list--cash').text.split()
-    count = 0
-    for i in range(values.index(a), len(values)):
-        if not values[i].isalpha():
-            count += 1
-            if count == b:
-                return float('.'.join(values[i].split(',')))
+    values = get_bs_obj.findAll('div', class_='module-exchange__item-text')
+    kurs_dict['USD']={"sell":float(values[1].text.strip().replace(',','.')),'buy':float(values[2].text.strip().replace(',','.'))}
+    kurs_dict['EUR']={"sell":float(values[5].text.strip().replace(',','.')),'buy':float(values[6].text.strip().replace(',','.'))}
+    return kurs_dict
 
 
 def oshadbank():
@@ -114,9 +111,7 @@ def kirilitsia(bankname):
 def get_new_kurs():
     kurs = {}
 
-    kurs['ukrsib'] = {
-        'USD': {"sell": ukrsib('USD', 2), "buy": ukrsib('USD', 1)},
-        'EUR': {"sell": ukrsib('EUR', 2), "buy": ukrsib('EUR', 1)}}
+    kurs['ukrsib'] = ukrsib()
     kurs['privat'] = {
         'USD': {"sell": privatbank("USD_sell"), "buy": privatbank("USD_buy")},
         'EUR': {"sell": privatbank("EUR_sell"), "buy": privatbank("EUR_buy")}}
