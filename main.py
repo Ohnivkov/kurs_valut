@@ -40,7 +40,7 @@ class UkrSib:
         r = requests.get("https://ukrsibbank.com/currency-cash/", headers=header)
         get_bs_obj = bs(r.text, 'html.parser')
         values = get_bs_obj.find_all('div', class_='module-exchange__item-text')
-        return float(values[1].text)
+        return float(values[3].text)
 
     def get_kurs_dollarbuy(self):
         ua = UserAgent()
@@ -48,7 +48,7 @@ class UkrSib:
         r = requests.get("https://ukrsibbank.com/currency-cash/", headers=header)
         get_bs_obj = bs(r.text, 'html.parser')
         values = get_bs_obj.findAll('div', class_='module-exchange__item-text')
-        return float(values[3].text)
+        return float(values[1].text)
 
     def get_kurs_eurosell(self):
         ua = UserAgent()
@@ -56,7 +56,7 @@ class UkrSib:
         r = requests.get("https://ukrsibbank.com/currency-cash/", headers=header)
         get_bs_obj = bs(r.text, 'html.parser')
         values = get_bs_obj.findAll('div', class_='module-exchange__item-text')
-        return float(values[7].text.strip().replace(',', '.'))
+        return float(values[9].text.strip().replace(',', '.'))
 
     def get_kurs_eurobuy(self):
         ua = UserAgent()
@@ -64,7 +64,7 @@ class UkrSib:
         r = requests.get("https://ukrsibbank.com/currency-cash/", headers=header)
         get_bs_obj = bs(r.text, 'html.parser')
         values = get_bs_obj.findAll('div', class_='module-exchange__item-text')
-        return float(values[9].text.strip().replace(',', '.'))
+        return float(values[7].text.strip().replace(',', '.'))
 
 
 class OshadBank:
@@ -84,8 +84,7 @@ class OshadBank:
         for line in get_bs_obj.findAll('div', class_='currency__item', limit=2):
             buy, sell = line.findAll('span', class_='currency__item_value')
             if line.find('span', class_="currency__item_name").text == 'USD':
-                res['usd_buy'] = sell.span.text
-
+                res['usd_buy'] = buy.span.text
         return float(res['usd_buy'])
     def get_kurs_eurosell(self):
         res = {}
@@ -104,7 +103,7 @@ class OshadBank:
         for line in get_bs_obj.findAll('div', class_='currency__item', limit=2):
             buy, sell = line.findAll('span', class_='currency__item_value')
             if line.find('span', class_="currency__item_name").text == 'EUR':
-                res['eur_buy'] = sell.span.text
+                res['eur_buy'] = buy.span.text
 
         return float(res['eur_buy'])
 class KredoBank:
