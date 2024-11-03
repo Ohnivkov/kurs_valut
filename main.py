@@ -1,13 +1,18 @@
+import datetime
 import json
 import os
-import datetime
+
 import requests
 import telebot
 from bs4 import BeautifulSoup as bs
 from fake_useragent import UserAgent
 
+from dataconnect import put_to_database
+
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
+
+
 class PrivatBank:
     def get_kurs_dollarsell(self):
         r = requests.get('https://privatbank.ua/', timeout=10)
@@ -18,7 +23,6 @@ class PrivatBank:
         r = requests.get('https://privatbank.ua/', timeout=10)
         get_bs_obj = bs(r.text, 'html.parser')
         return float(get_bs_obj.find('td', id='USD_buy').text.strip())
-
 
     def get_kurs_eurosell(self):
         r = requests.get('https://privatbank.ua/', timeout=10)
@@ -75,6 +79,7 @@ class OshadBank:
             if line.find('span', class_="currency__item_name").text == 'USD':
                 res['usd_sell'] = sell.span.text
         return float(res['usd_sell'])
+
     def get_kurs_dollarbuy(self):
         res = {}
         r = requests.get("https://www.oschadbank.ua")
@@ -84,6 +89,7 @@ class OshadBank:
             if line.find('span', class_="currency__item_name").text == 'USD':
                 res['usd_buy'] = buy.span.text
         return float(res['usd_buy'])
+
     def get_kurs_eurosell(self):
         res = {}
         r = requests.get("https://www.oschadbank.ua")
@@ -94,6 +100,7 @@ class OshadBank:
                 res['eur_sell'] = sell.span.text
 
         return float(res['eur_sell'])
+
     def get_kurs_eurobuy(self):
         res = {}
         r = requests.get("https://www.oschadbank.ua")
@@ -104,24 +111,29 @@ class OshadBank:
                 res['eur_buy'] = buy.span.text
 
         return float(res['eur_buy'])
+
+
 class KredoBank:
     def get_kurs_dollarsell(self):
         r = requests.get("https://kredobank.com.ua/info/kursy-valyut/commercial")
         get_bs_obj = bs(r.text, 'html.parser')
-        values=get_bs_obj.findAll('td')
+        values = get_bs_obj.findAll('td')
 
         return values[2].text
+
     def get_kurs_dollarbuy(self):
         r = requests.get("https://kredobank.com.ua/info/kursy-valyut/commercial")
         get_bs_obj = bs(r.text, 'html.parser')
         values = get_bs_obj.findAll('td')
         return values[3].text
+
     def get_kurs_eurosell(self):
         r = requests.get("https://kredobank.com.ua/info/kursy-valyut/commercial")
         get_bs_obj = bs(r.text, 'html.parser')
         values = get_bs_obj.findAll('td')
 
         return values[8].text
+
     def get_kurs_eurobuy(self):
         r = requests.get("https://kredobank.com.ua/info/kursy-valyut/commercial")
         get_bs_obj = bs(r.text, 'html.parser')
@@ -223,6 +235,7 @@ def main(kurs):
 
     if flag:
         putdatetofilekurs(kurs)
+        put_to_database(kurs,datetime.datetime.now())
         return True
     else:
         return False
