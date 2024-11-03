@@ -1,6 +1,6 @@
 import json
 import os
-
+import datetime
 import requests
 import telebot
 from bs4 import BeautifulSoup as bs
@@ -8,8 +8,6 @@ from fake_useragent import UserAgent
 
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
-
-
 class PrivatBank:
     def get_kurs_dollarsell(self):
         r = requests.get('https://privatbank.ua/', timeout=10)
@@ -203,7 +201,6 @@ if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
 if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
     with open(os.path.join(os.getcwd(), 'users.json'), 'w') as f:
         json.dump({}, f)
-
 send_to_tel = ''
 
 
