@@ -12,7 +12,7 @@ if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
         json.dump(f)
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
-bot = telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
+bot = telebot.TeleBot('7579262673:AAEu9r_W-GetHmLUbDIV76NkkSInczRuvxA')
 
 
 @bot.message_handler(commands=['start'])
