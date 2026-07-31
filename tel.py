@@ -1,7 +1,9 @@
-import telebot
-from telebot import types
 import json
 import os
+
+import telebot
+from telebot import types
+
 import main
 
 if not os.path.exists(os.path.join(os.getcwd(), 'kurs.json')):
@@ -12,7 +14,7 @@ if not os.path.exists(os.path.join(os.getcwd(), 'users.json')):
         json.dump(f)
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
-bot = telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
+bot = telebot.TeleBot(os.getenv("BOT_TOKEN"))
 
 
 @bot.message_handler(commands=['start'])

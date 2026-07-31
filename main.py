@@ -11,6 +11,7 @@ from dataconnect import put_to_database
 
 user_file = os.path.join(os.getcwd(), 'users.json')
 curs_file = os.path.join(os.getcwd(), 'kurs.json')
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
 class PrivatBank:
@@ -173,7 +174,7 @@ def message(kurs, bankname):
 
 
 def send_telegram(message, token):
-    bot = telebot.TeleBot('5343945393:AAHa9fg3dyQBC624pPjQppRUiSPpNXgj1js')
+    bot = telebot.TeleBot(BOT_TOKEN)
     bot.send_message(token, message, parse_mode='html')
 
 

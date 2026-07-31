@@ -1,5 +1,9 @@
+import os
+
 from pymongo import MongoClient
-client = MongoClient("mongodb+srv://vi280708ovv:l20nfH2au0qg63ml@cluster0.h1bqaam.mongodb.net/kurs_valut", ssl=True)
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+client = MongoClient(DATABASE_URL, ssl=True)
 
 
 def put_to_database(dict,time):
